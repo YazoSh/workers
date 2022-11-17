@@ -15,16 +15,17 @@ export class DBService {
     }
 
     getJobById(id: string) {
-        return this.DB.find((job) => job.referenceID === id)
+        return this.DB.find((job) => job.id === id)
     }
 
     updateJob(id: string, updatedJob: any) {
         const currentJob = this.getJobById(id)
         Object.assign(currentJob, updatedJob)
+        return 'Updated Job'
     }
 
     deleteJob(id: string) {
-        const index = this.DB.findIndex((job) => job.referenceID == id)
+        const index = this.DB.findIndex((job) => job.id == id)
 
         if (index >= 0) this.DB.splice(index, 1)
     }

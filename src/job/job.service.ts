@@ -1,38 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { DBService } from 'src/dbs/dbs.service'
 import { Job } from 'src/common/models/job.model'
+import { JobDTO } from 'src/common/dtos/job.dto'
 
 @Injectable()
 export class JobService {
     constructor(private dbsService: DBService) {}
 
-    testJob: Job = {
-        title: 'The Gayest Job Ever',
+    createJob(jobDTO: JobDTO) {
+        const newJob: Job = {
+            ...jobDTO,
+            datePosted: new Date().toISOString(),
+            ownerId: 'TODO ID',
+            applicants: ['No One', 'TODO'],
+        }
 
-        location: 'Gay land',
-
-        description:
-            "You'll get to be gay as much as you want, but we'll film it and give you some of the money",
-
-        date: new Date().toISOString(),
-
-        company: 'Gayhub',
-
-        industry: 'porn',
-
-        careerLevel: 'Profisional',
-
-        logo: 'gaylogo.png',
-
-        referenceID: 'TODO',
-
-        ownerID: '//TODO',
-
-        applicants: ['NoOne', 'TODO'],
-    }
-
-    createJob() {
-        this.dbsService.createJob(this.testJob)
+        this.dbsService.createJob(newJob)
         return 'Created'
     }
 
@@ -40,13 +23,13 @@ export class JobService {
         return this.dbsService.getAllJobs()
     }
 
-    updateJob() {
-        this.dbsService.updateJob('TODO', { location: 'Lesbian land' })
+    updateJob(id: string, jobDTO: JobDTO) {
+        this.dbsService.updateJob(id, jobDTO)
         return 'Patched'
     }
 
-    deleteJob() {
-        this.dbsService.deleteJob('TODO')
+    deleteJob(id: string) {
+        this.dbsService.deleteJob(id)
         return 'Deleted'
     }
 }

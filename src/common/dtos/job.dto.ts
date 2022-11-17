@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty } from 'class-validator'
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator'
+import { CareerLevel } from '../constants/careerLevel'
 
 export class JobDTO {
     @IsNotEmpty()
@@ -14,8 +15,8 @@ export class JobDTO {
     description: string
 
     @IsNotEmpty()
-    @IsString()
-    careerLevel: string
+    @IsEnum(CareerLevel)
+    careerLevel: CareerLevel
 
     @IsNotEmpty()
     @IsString()

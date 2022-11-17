@@ -1,23 +1,21 @@
+import { CareerLevel } from '../constants/careerLevel'
+
 export class Job {
+    id?: string
+
     title: string
 
     location: string
 
     description: string
 
-    date: string
-
-    company: string
+    datePosted: string
 
     industry: string
 
-    careerLevel: string
+    careerLevel: CareerLevel
 
-    logo: string
-
-    referenceID: string
-
-    ownerID: string
+    ownerId: string
 
     applicants: string[]
 }
