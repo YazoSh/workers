@@ -7,28 +7,33 @@ import { JobDTO } from 'src/common/dtos/job.dto'
 export class JobService {
     constructor(private dbsService: DBService) {}
 
-    createJob(jobDTO: JobDTO) {
+    async createJob(jobDTO: JobDTO) {
+        // TODO pass loged in company ID
+        const companyId = '20b22bf9-3f71-4f67-b6fa-081ae5e28888'
         const newJob: Job = {
             ...jobDTO,
-            datePosted: new Date().toISOString(),
-            ownerId: 'TODO ID',
-            applicants: ['No One', 'TODO'],
+            companyId: companyId,
         }
 
-        this.dbsService.createJob(newJob)
-        return 'Created'
+        return this.dbsService.createJob(newJob)
     }
 
-    getAllJobs() {
+    async getAllJobs() {
         return this.dbsService.getAllJobs()
     }
 
-    updateJob(id: string, jobDTO: JobDTO) {
+    async updateJob(id: string, jobDTO: JobDTO) {
         this.dbsService.updateJob(id, jobDTO)
         return 'Patched'
     }
 
-    deleteJob(id: string) {
+    async applyToJob(jobId: string) {
+        // TODO pass loged in user ID
+        const userId = '48396995-ee41-453b-adab-d8dbcadd899b'
+        return this.dbsService.applyToJob(userId, jobId)
+    }
+
+    async deleteJob(id: string) {
         this.dbsService.deleteJob(id)
         return 'Deleted'
     }

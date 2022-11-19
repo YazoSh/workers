@@ -44,6 +44,11 @@ export class JobController {
         return this.jobService.updateJob(id, jobDTO)
     }
 
+    @Post('apply/:id')
+    applytoJob(@Param('id') id: string) {
+        return this.jobService.applyToJob(id)
+    }
+
     @Delete(':id')
     deleteJob(@Param('id') id: string) {
         return this.jobService.deleteJob(id)

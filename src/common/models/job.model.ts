@@ -9,13 +9,13 @@ export class Job {
 
     description: string
 
-    datePosted: string
+    datePosted?: string
 
     industry: string
 
     careerLevel: CareerLevel
 
-    ownerId: string
+    companyId: string
 
-    applicants: string[]
+    applicants?: string[]
 }

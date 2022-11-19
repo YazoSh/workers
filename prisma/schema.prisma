@@ -6,45 +6,48 @@ generator client {
 }
 
 datasource db {
-    provider = "mongodb"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
 model User {
-    id          String    @id @default(auto()) @map("_id") @db.ObjectId
-    name        String
-    email       String
-    // Login info Relationship, User 1..1 LoginInfo
-    loginInfo   LoginInfo @relation(fields: [loginInfoId], references: [id])
-    loginInfoId String    @unique @db.ObjectId
-    // Company Relationship, User 1..0-1
-    company     Company?
-}
-
-model LoginInfo {
-    id       String @id @default(auto()) @map("_id") @db.ObjectId
+    id       String @id @default(uuid())
+    name     String
+    email    String
     username String
     password String
-    user     User?
+
+    company Company?
+
+    appliedJobs Job[]
+
+    @@map("users")
 }
 
 model Company {
-    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    id      String @id @default(uuid())
     name    String
     logo    String
     jobs    Job[]
     owner   User   @relation(fields: [ownerId], references: [id])
-    ownerId String @unique @db.ObjectId
+    ownerId String @unique
+
+    @@map("companies")
 }
 
 model Job {
-    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    id          String   @id @default(uuid())
     title       String
     location    String
     description String
     datePosted  DateTime @default(now())
     industry    String
     careerLevel String
-    company     Company  @relation(fields: [companyId], references: [id])
-    companyId   String   @db.ObjectId
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    candidates User[]
+
+    @@map("jobs")
 }
