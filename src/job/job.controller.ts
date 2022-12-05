@@ -10,7 +10,8 @@ import {
     ValidationPipe,
 } from '@nestjs/common'
 import { JobService } from './job.service'
-import { JobDTO } from '../common/dtos/job.dto'
+import { CreateJobDTO } from 'src/common/dtos/CreateJob.dto'
+import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 
 @Controller('job')
 export class JobController {
@@ -23,13 +24,18 @@ export class JobController {
             forbidNonWhitelisted: true,
         }),
     )
-    createJob(@Body() jobDTO: JobDTO) {
-        return this.jobService.createJob(jobDTO)
+    createJob(@Body() createJobDTO: CreateJobDTO) {
+        return this.jobService.createJob(createJobDTO)
+    }
+
+    @Get(':id')
+    getJobById(@Param('id') id: string) {
+        return this.jobService.getJobById(id)
     }
 
     @Get()
-    getAllJobs() {
-        return this.jobService.getAllJobs()
+    jobSearch(@Body() searchJobDTO: SearchJobDTO) {
+        return this.jobService.jobSearch(searchJobDTO)
     }
 
     @Patch(':id')
@@ -40,8 +46,8 @@ export class JobController {
             skipMissingProperties: true,
         }),
     )
-    updateJob(@Param('id') id: string, @Body() jobDTO: JobDTO) {
-        return this.jobService.updateJob(id, jobDTO)
+    updateJob(@Param('id') id: string, @Body() createJobDTO: CreateJobDTO) {
+        return this.jobService.updateJob(id, createJobDTO)
     }
 
     @Post('apply/:id')

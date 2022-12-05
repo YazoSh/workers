@@ -1,35 +1,40 @@
 import { Injectable } from '@nestjs/common'
 import { DBService } from 'src/dbs/dbs.service'
 import { Job } from 'src/common/models/job.model'
-import { JobDTO } from 'src/common/dtos/job.dto'
+import { CreateJobDTO } from 'src/common/dtos/CreateJob.dto'
+import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 
 @Injectable()
 export class JobService {
     constructor(private dbsService: DBService) {}
 
-    async createJob(jobDTO: JobDTO) {
+    async createJob(createJobDTO: CreateJobDTO) {
         // TODO pass loged in company ID
-        const companyId = '20b22bf9-3f71-4f67-b6fa-081ae5e28888'
+        const companyId = 'b53f3c98-0558-477e-9c04-cf4de97a0e1b'
         const newJob: Job = {
-            ...jobDTO,
+            ...createJobDTO,
             companyId: companyId,
         }
 
         return this.dbsService.createJob(newJob)
     }
 
-    async getAllJobs() {
-        return this.dbsService.getAllJobs()
+    async getJobById(id: string) {
+        return this.dbsService.getJobById(id)
     }
 
-    async updateJob(id: string, jobDTO: JobDTO) {
-        this.dbsService.updateJob(id, jobDTO)
+    async jobSearch(searchJobDTO: SearchJobDTO) {
+        return this.dbsService.jobSearch(searchJobDTO)
+    }
+
+    async updateJob(id: string, createJobDTO: CreateJobDTO) {
+        this.dbsService.updateJob(id, createJobDTO)
         return 'Patched'
     }
 
     async applyToJob(jobId: string) {
         // TODO pass loged in user ID
-        const userId = '48396995-ee41-453b-adab-d8dbcadd899b'
+        const userId = 'fdec312b-d7d4-4dad-bbf6-79f60d569d0f'
         return this.dbsService.applyToJob(userId, jobId)
     }
 
