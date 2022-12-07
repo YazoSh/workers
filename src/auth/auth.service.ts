@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common'
-import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
 import { UserJWT } from '../common/models/userJWT.model'
+import { DBService } from '../dbs/dbs.service'
 
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UserService,
         private jwtService: JwtService,
+        private dbsService: DBService,
     ) {}
 
     async validateUser(username: string, password: string) {
-        const user = await this.userService.getUser(username)
+        const user = await this.dbsService.getUser(username)
         // TODO Compare to the hased password
         if (user && user.hashedPassword === password) {
             const { hashedPassword, ...result } = user

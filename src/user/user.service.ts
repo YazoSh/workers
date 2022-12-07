@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DBService } from '../dbs/dbs.service'
 import { CreateUserDTO } from '../common/dtos/CreateUser.dto'
-import { User } from '../common/models/user.model'
+import { CreateCompanyDTO } from 'src/common/dtos/CreateCompany.dto'
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,12 @@ export class UserService {
         })
     }
 
-    async getUser(username: string): Promise<User> {
-        return await this.dbsService.getUser(username)
+    async createCompany(companyDTO: CreateCompanyDTO, userId: string) {
+        this.dbsService.createCompany({
+            ...companyDTO,
+            // TODO Logo implemention
+            logo: 'No Logo for now',
+            ownerId: userId,
+        })
     }
 }

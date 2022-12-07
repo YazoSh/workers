@@ -8,24 +8,28 @@ import {
     Param,
     UsePipes,
     ValidationPipe,
+    UseGuards,
+    Request,
 } from '@nestjs/common'
 import { JobService } from './job.service'
 import { CreateJobDTO } from 'src/common/dtos/CreateJob.dto'
 import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 
 @Controller('job')
 export class JobController {
     constructor(private jobService: JobService) {}
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     @UsePipes(
         new ValidationPipe({
             whitelist: true,
             forbidNonWhitelisted: true,
         }),
     )
-    createJob(@Body() createJobDTO: CreateJobDTO) {
-        return this.jobService.createJob(createJobDTO)
+    createJob(@Body() createJobDTO: CreateJobDTO, @Request() req: any) {
+        return this.jobService.createJob(createJobDTO, req.user.sub)
     }
 
     @Get(':id')

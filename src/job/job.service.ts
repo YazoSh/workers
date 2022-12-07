@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { DBService } from 'src/dbs/dbs.service'
 import { Job } from 'src/common/models/job.model'
 import { CreateJobDTO } from 'src/common/dtos/CreateJob.dto'
@@ -8,12 +8,20 @@ import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 export class JobService {
     constructor(private dbsService: DBService) {}
 
-    async createJob(createJobDTO: CreateJobDTO) {
-        // TODO pass loged in company ID
-        const companyId = 'b53f3c98-0558-477e-9c04-cf4de97a0e1b'
+    async createJob(createJobDTO: CreateJobDTO, userId: string) {
+        const company = await this.dbsService.getCompany(userId)
+        if (!company)
+            throw new HttpException(
+                {
+                    status: HttpStatus.NOT_FOUND,
+                    error: "The User hasn' created a company!",
+                },
+                HttpStatus.NOT_FOUND,
+            )
+
         const newJob: Job = {
             ...createJobDTO,
-            companyId: companyId,
+            companyId: company.id,
         }
 
         return this.dbsService.createJob(newJob)

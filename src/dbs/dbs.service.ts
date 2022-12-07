@@ -3,11 +3,14 @@ import { Injectable } from '@nestjs/common'
 import { Job } from '../common/models/job.model'
 import { User } from '../common/models/user.model'
 import { PrismaClient } from '@prisma/client'
+import { Company } from 'src/common/models/company.model'
 import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 
 @Injectable()
 export class DBService {
-    private readonly prisma = new PrismaClient()
+    private readonly prisma = new PrismaClient({
+        errorFormat: 'minimal',
+    })
 
     // TODO Remove
     private readonly DB: Job[] = []
@@ -70,17 +73,39 @@ export class DBService {
     }
 
     async createUser(user: User) {
-        this.prisma.user.create({
+        await this.prisma.user.create({
             data: {
                 ...user,
             },
         })
     }
 
+    async createCompany(company: Company) {
+        await this.prisma.company.create({
+            data: {
+                name: company.name,
+                logo: company.logo,
+                owner: {
+                    connect: {
+                        id: company.ownerId,
+                    },
+                },
+            },
+        })
+    }
+
     async getUser(username: string): Promise<User> {
-        return this.prisma.user.findFirst({
+        return await this.prisma.user.findFirst({
             where: {
                 username,
+            },
+        })
+    }
+
+    async getCompany(userId: string): Promise<Company> {
+        return await this.prisma.company.findUnique({
+            where: {
+                ownerId: userId,
             },
         })
     }
