@@ -5,15 +5,13 @@ import { User } from '../common/models/user.model'
 import { PrismaClient } from '@prisma/client'
 import { Company } from 'src/common/models/company.model'
 import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
+import { UpdateSearchJobDTO } from 'src/common/dtos/UpdateSearchJob.dto'
 
 @Injectable()
 export class DBService {
     private readonly prisma = new PrismaClient({
         errorFormat: 'minimal',
     })
-
-    // TODO Remove
-    private readonly DB: Job[] = []
 
     async createJob(job: Job) {
         return await this.prisma.job.create({
@@ -30,8 +28,8 @@ export class DBService {
         })
     }
 
-    async getJobById(id: string) {
-        return await this.prisma.job.findMany({
+    async getJobById(id: string): Promise<Job> {
+        return await this.prisma.job.findUnique({
             where: {
                 id,
             },
@@ -43,15 +41,19 @@ export class DBService {
         return await this.prisma.job.findMany()
     }
 
-    // TODO Remove the any type
-    updateJob(id: string, updatedJob: any) {
-        const currentJob = this.getJobById(id)
-        Object.assign(currentJob, updatedJob)
-        return 'Updated Job'
+    async updateJob(jobId: string, updatedJob: UpdateSearchJobDTO) {
+        await this.prisma.job.update({
+            data: {
+                ...updatedJob,
+            },
+            where: {
+                id: jobId,
+            },
+        })
     }
 
     async applyToJob(userId: string, jobId: string) {
-        return this.prisma.job.update({
+        return await this.prisma.job.update({
             data: {
                 candidates: {
                     connect: {
@@ -65,11 +67,12 @@ export class DBService {
         })
     }
 
-    async deleteJob(id: string) {
-        // TODO
-        const index = this.DB.findIndex((job) => job.id == id)
-
-        if (index >= 0) this.DB.splice(index, 1)
+    async deleteJob(jobId: string) {
+        return this.prisma.job.delete({
+            where: {
+                id: jobId,
+            },
+        })
     }
 
     async createUser(user: User) {

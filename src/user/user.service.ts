@@ -18,7 +18,7 @@ export class UserService {
     }
 
     async createCompany(companyDTO: CreateCompanyDTO, userId: string) {
-        this.dbsService.createCompany({
+        await this.dbsService.createCompany({
             ...companyDTO,
             // TODO Logo implemention
             logo: 'No Logo for now',

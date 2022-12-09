@@ -9,7 +9,7 @@ export class Job {
 
     description: string
 
-    datePosted?: string
+    datePosted?: Date
 
     industry: string
 
