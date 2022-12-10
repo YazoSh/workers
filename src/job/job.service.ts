@@ -1,13 +1,6 @@
-import {
-    BadRequestException,
-    HttpException,
-    HttpStatus,
-    Injectable,
-} from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { DBService } from 'src/dbs/dbs.service'
-import { Job } from 'src/common/models/job.model'
 import { CreateJobDTO } from 'src/common/dtos/CreateJob.dto'
-import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 import { UpdateSearchJobDTO } from 'src/common/dtos/UpdateSearchJob.dto'
 
 @Injectable()
@@ -17,32 +10,24 @@ export class JobService {
     async createJob(createJobDTO: CreateJobDTO, userId: string) {
         const company = await this.dbsService.getCompany(userId)
         if (!company)
-            throw new HttpException(
-                {
-                    status: HttpStatus.NOT_FOUND,
-                    error: "The User hasn' created a company!",
-                },
-                HttpStatus.NOT_FOUND,
-            )
+            throw new BadRequestException("The User hasn't created a company!")
 
-        const newJob: Job = {
+        return await this.dbsService.createJob({
             ...createJobDTO,
             companyId: company.id,
-        }
-
-        return this.dbsService.createJob(newJob)
+        })
     }
 
     async getJobById(id: string) {
-        return this.dbsService.getJobById(id)
+        return await this.dbsService.getJobById(id)
     }
 
-    async jobSearch(searchJobDTO: SearchJobDTO) {
-        return this.dbsService.jobSearch(searchJobDTO)
+    async jobSearch(searchJobDTO: UpdateSearchJobDTO) {
+        return await this.dbsService.jobSearch(searchJobDTO)
     }
 
     async updateJob(id: string, updateJobDTO: UpdateSearchJobDTO) {
-        await this.dbsService.updateJob(id, updateJobDTO)
+        return await this.dbsService.updateJob(id, updateJobDTO)
     }
 
     async applyToJob(userId: string, jobId: string) {

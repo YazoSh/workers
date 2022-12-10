@@ -10,6 +10,8 @@ import { Response } from 'express'
 @Catch(PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
     catch(e: PrismaClientKnownRequestError, host: ArgumentsHost) {
+        console.log(e)
+
         const status = HttpStatus.FORBIDDEN
 
         const msg =

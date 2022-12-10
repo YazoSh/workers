@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { DBService } from '../dbs/dbs.service'
 import { CreateUserDTO } from '../common/dtos/CreateUser.dto'
 import { CreateCompanyDTO } from 'src/common/dtos/CreateCompany.dto'
+import bcrypt from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -12,8 +13,7 @@ export class UserService {
             name: user.name,
             username: user.username,
             email: user.email,
-            // TODO Hashpassword
-            hashedPassword: user.password,
+            hashedPassword: await bcrypt.hash(user.password, 10),
         })
     }
 

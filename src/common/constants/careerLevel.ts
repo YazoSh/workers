@@ -1,9 +1,9 @@
 export const CareerLevel: {
-    [x: string]: 'Entry' | 'Intermediate' | 'Senior'
+    [x: string]: 'entry' | 'intermediate' | 'senior'
 } = {
-    Entry: 'Entry',
-    Intermediate: 'Intermediate',
-    Senior: 'Senior',
+    Entry: 'entry',
+    Intermediate: 'intermediate',
+    Senior: 'senior',
 }
 
 export type CareerLevel = typeof CareerLevel[keyof typeof CareerLevel]

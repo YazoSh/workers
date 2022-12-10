@@ -4,7 +4,6 @@ import { Job } from '../common/models/job.model'
 import { User } from '../common/models/user.model'
 import { PrismaClient } from '@prisma/client'
 import { Company } from 'src/common/models/company.model'
-import { SearchJobDTO } from 'src/common/dtos/SearchJob.dto'
 import { UpdateSearchJobDTO } from 'src/common/dtos/UpdateSearchJob.dto'
 
 @Injectable()
@@ -36,13 +35,31 @@ export class DBService {
         })
     }
 
-    async jobSearch(searchJobDTO: SearchJobDTO) {
-        // TODO
-        return await this.prisma.job.findMany()
+    private ci_query(v: string): {
+        contains: string
+        mode: 'insensitive'
+    } {
+        return {
+            contains: v,
+            mode: 'insensitive',
+        }
+    }
+
+    async jobSearch(searchJobDTO: UpdateSearchJobDTO): Promise<Job[]> {
+        console.log(searchJobDTO)
+        return await this.prisma.job.findMany({
+            where: {
+                title: this.ci_query(searchJobDTO.title),
+                location: this.ci_query(searchJobDTO.location),
+                description: this.ci_query(searchJobDTO.description),
+                careerLevel: searchJobDTO.careerLevel,
+                industry: this.ci_query(searchJobDTO.industry),
+            },
+        })
     }
 
     async updateJob(jobId: string, updatedJob: UpdateSearchJobDTO) {
-        await this.prisma.job.update({
+        return await this.prisma.job.update({
             data: {
                 ...updatedJob,
             },

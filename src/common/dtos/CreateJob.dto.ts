@@ -1,4 +1,4 @@
-import { IsString, IsAlpha, IsNotEmpty, IsEnum } from 'class-validator'
+import { IsString, IsAlpha, IsNotEmpty, IsEnum, IsAscii } from 'class-validator'
 import { CareerLevel } from '../constants/careerLevel'
 
 export class CreateJobDTO {
@@ -7,7 +7,7 @@ export class CreateJobDTO {
     title: string
 
     @IsNotEmpty()
-    @IsAlpha()
+    @IsAscii()
     location: string
 
     @IsNotEmpty()
