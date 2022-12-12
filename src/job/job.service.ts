@@ -33,7 +33,7 @@ export class JobService {
     async applyToJob(userId: string, jobId: string) {
         const userCompany = await this.dbsService.getCompany(userId)
         const job = await this.dbsService.getJobById(jobId)
-        if (userCompany.id === job.companyId)
+        if (userCompany && userCompany.id === job.companyId)
             throw new BadRequestException("User can't apply to their own Job")
 
         await this.dbsService.applyToJob(userId, jobId)

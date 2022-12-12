@@ -12,6 +12,8 @@ export class DBService {
         errorFormat: 'minimal',
     })
 
+    private perPage = 10
+
     async createJob(job: Job) {
         return await this.prisma.job.create({
             data: {
@@ -46,8 +48,11 @@ export class DBService {
     }
 
     async jobSearch(searchJobDTO: UpdateSearchJobDTO): Promise<Job[]> {
-        console.log(searchJobDTO)
+        if (!searchJobDTO.page || searchJobDTO.page < 1) searchJobDTO.page = 1
+
         return await this.prisma.job.findMany({
+            skip: this.perPage * (searchJobDTO.page - 1),
+            take: this.perPage,
             where: {
                 title: this.ci_query(searchJobDTO.title),
                 location: this.ci_query(searchJobDTO.location),
