@@ -4,6 +4,7 @@ import { DBSModule } from './dbs/dbs.module'
 import { JobModule } from './job/job.module'
 import { UserModule } from './user/user.module'
 import { ConfigModule } from '@nestjs/config'
+import { FileModule } from './file/file.module'
 
 @Module({
     imports: [
@@ -11,6 +12,7 @@ import { ConfigModule } from '@nestjs/config'
         DBSModule,
         AuthModule,
         UserModule,
+        FileModule,
         ConfigModule.forRoot({
             isGlobal: true,
             cache: true,
