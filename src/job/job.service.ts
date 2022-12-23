@@ -39,6 +39,10 @@ export class JobService {
         await this.dbsService.applyToJob(userId, jobId)
     }
 
+    async getApplicants(jobId: string) {
+        return this.dbsService.getApplicants(jobId)
+    }
+
     async deleteJob(id: string) {
         await this.dbsService.deleteJob(id)
     }

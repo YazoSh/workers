@@ -89,6 +89,25 @@ export class DBService {
         })
     }
 
+    async getApplicants(jobId: string) {
+        return (
+            await this.prisma.job.findFirst({
+                where: {
+                    id: jobId,
+                },
+                select: {
+                    candidates: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+            })
+        ).candidates
+    }
+
     async deleteJob(jobId: string) {
         return this.prisma.job.delete({
             where: {

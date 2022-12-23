@@ -61,6 +61,12 @@ export class JobController {
         await this.jobService.applyToJob(req.user.sub, jobId)
     }
 
+    @Get('apply/:id')
+    @UseGuards(JwtAuthGuard, JobGuard)
+    async getApplicant(@Param('id') jobId: string) {
+        return await this.jobService.getApplicants(jobId)
+    }
+
     @Delete(':id')
     @UseGuards(JwtAuthGuard, JobGuard)
     async deleteJob(@Param('id') id: string) {
