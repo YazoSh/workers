@@ -21,6 +21,10 @@ export class FileService {
         const fileHandler = await fsPromises.open(this.getPath(userId), 'w')
         await fileHandler.write(file.buffer)
         await fileHandler.close()
+
+        return {
+            success: true,
+        }
     }
 
     hasCV(userId: string) {

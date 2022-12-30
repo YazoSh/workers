@@ -33,14 +33,25 @@ export class JobService {
     async applyToJob(userId: string, jobId: string) {
         const userCompany = await this.dbsService.getCompany(userId)
         const job = await this.dbsService.getJobById(jobId)
+
         if (userCompany && userCompany.id === job.companyId)
             throw new BadRequestException("User can't apply to their own Job")
 
+        if (await this.dbsService.checkIfAlreadyApplied(userId, jobId))
+            throw new BadRequestException('User Already Applied')
+
         await this.dbsService.applyToJob(userId, jobId)
+
+        return {
+            success: true,
+        }
     }
 
     async getApplicants(jobId: string) {
-        return this.dbsService.getApplicants(jobId)
+        return {
+            success: true,
+            data: await this.dbsService.getApplicants(jobId),
+        }
     }
 
     async deleteJob(id: string) {

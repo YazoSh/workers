@@ -89,6 +89,19 @@ export class DBService {
         })
     }
 
+    async checkIfAlreadyApplied(userId: string, jobId: string) {
+        return this.prisma.job.findFirst({
+            where: {
+                id: jobId,
+                candidates: {
+                    some: {
+                        id: userId,
+                    },
+                },
+            },
+        })
+    }
+
     async getApplicants(jobId: string) {
         return (
             await this.prisma.job.findFirst({
@@ -142,6 +155,9 @@ export class DBService {
         return await this.prisma.user.findFirst({
             where: {
                 username,
+            },
+            include: {
+                company: true,
             },
         })
     }

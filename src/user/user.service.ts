@@ -15,6 +15,32 @@ export class UserService {
             email: user.email,
             hashedPassword: await bcrypt.hash(user.password, 10),
         })
+        return {
+            success: true,
+        }
+    }
+
+    async getUser(username: string) {
+        const user = await this.dbsService.getUser(username)
+        console.log(user)
+        return {
+            success: user != null,
+            data: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+            },
+        }
+    }
+
+    async getCompany(userId: string) {
+        const company = await this.dbsService.getCompany(userId)
+        return {
+            success: company !== null,
+            data: {
+                ...company,
+            },
+        }
     }
 
     async createCompany(companyDTO: CreateCompanyDTO, userId: string) {
@@ -24,5 +50,8 @@ export class UserService {
             logo: 'No Logo for now',
             ownerId: userId,
         })
+        return {
+            success: true,
+        }
     }
 }

@@ -34,7 +34,7 @@ export class JobController {
         return await this.jobService.getJobById(id)
     }
 
-    @Get()
+    @Post('search')
     async jobSearch(@Body() searchJobDTO: UpdateSearchJobDTO) {
         return await this.jobService.jobSearch(searchJobDTO)
     }
@@ -58,7 +58,7 @@ export class JobController {
     @Post('apply/:id')
     @UseGuards(JwtAuthGuard)
     async applytoJob(@Param('id') jobId: string, @Request() req: any) {
-        await this.jobService.applyToJob(req.user.sub, jobId)
+        return await this.jobService.applyToJob(req.user.sub, jobId)
     }
 
     @Get('apply/:id')

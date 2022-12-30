@@ -32,7 +32,7 @@ export class FileController {
         @UploadedFile(new FileTypeValidator('pdf')) file: Express.Multer.File,
         @Request() req: any,
     ) {
-        await this.fileService.uploadCV(file, req.user.sub)
+        return await this.fileService.uploadCV(file, req.user.sub)
     }
 
     @Get('cv/:id')

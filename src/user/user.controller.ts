@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Get,
+    Post,
+    Req,
+    Request,
+    UseGuards,
+} from '@nestjs/common'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { CreateCompanyDTO } from 'src/common/dtos/CreateCompany.dto'
 import { CreateUserDTO } from 'src/common/dtos/CreateUser.dto'
@@ -10,12 +18,24 @@ export class UserController {
 
     @Post('register')
     async createUser(@Body() userDTO: CreateUserDTO) {
-        await this.userService.createUser(userDTO)
+        return await this.userService.createUser(userDTO)
+    }
+
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    async getUser(@Request() req: any) {
+        return await this.userService.getUser(req.user.username)
+    }
+
+    @Get('company')
+    @UseGuards(JwtAuthGuard)
+    async getCompany(@Request() req: any) {
+        return await this.userService.getCompany(req.user.sub)
     }
 
     @Post('company')
     @UseGuards(JwtAuthGuard)
     async createCompany(@Body() companyDTO: CreateCompanyDTO, @Req() req: any) {
-        await this.userService.createCompany(companyDTO, req.user.sub)
+        return await this.userService.createCompany(companyDTO, req.user.sub)
     }
 }
