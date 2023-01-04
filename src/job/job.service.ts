@@ -12,10 +12,13 @@ export class JobService {
         if (!company)
             throw new BadRequestException("The User hasn't created a company!")
 
-        return await this.dbsService.createJob({
-            ...createJobDTO,
-            companyId: company.id,
-        })
+        return {
+            success: true,
+            data: await this.dbsService.createJob({
+                ...createJobDTO,
+                companyId: company.id,
+            }),
+        }
     }
 
     async getJobById(id: string) {
@@ -45,6 +48,17 @@ export class JobService {
         return {
             success: true,
         }
+    }
+
+    async checkIfAlreadyApplied(userId: string, jobId: string) {
+        if (await this.dbsService.checkIfAlreadyApplied(userId, jobId))
+            return {
+                applied: true,
+            }
+        else
+            return {
+                applied: false,
+            }
     }
 
     async getApplicants(jobId: string) {

@@ -6,10 +6,15 @@ import {
     IsAscii,
     IsNumber,
     IsOptional,
+    IsUUID,
 } from 'class-validator'
 import { CareerLevel } from '../constants/careerLevel'
 
 export class UpdateSearchJobDTO {
+    @IsOptional()
+    @IsUUID()
+    companyId: string
+
     @IsOptional()
     @IsString()
     title?: string

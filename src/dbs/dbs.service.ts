@@ -34,6 +34,9 @@ export class DBService {
             where: {
                 id,
             },
+            include: {
+                company: true,
+            },
         })
     }
 
@@ -59,6 +62,10 @@ export class DBService {
                 description: this.ci_query(searchJobDTO.description),
                 careerLevel: searchJobDTO.careerLevel,
                 industry: this.ci_query(searchJobDTO.industry),
+                companyId: searchJobDTO.companyId,
+            },
+            include: {
+                company: true,
             },
         })
     }
@@ -132,7 +139,11 @@ export class DBService {
     async createUser(user: User) {
         await this.prisma.user.create({
             data: {
-                ...user,
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                username: user.username,
+                hashedPassword: user.hashedPassword,
             },
         })
     }

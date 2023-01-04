@@ -61,9 +61,18 @@ export class JobController {
         return await this.jobService.applyToJob(req.user.sub, jobId)
     }
 
+    @Get('apply/user/:id')
+    @UseGuards(JwtAuthGuard)
+    async checkIfAlreadyApplied(
+        @Param('id') jobId: string,
+        @Request() req: any,
+    ) {
+        return await this.jobService.checkIfAlreadyApplied(req.user.sub, jobId)
+    }
+
     @Get('apply/:id')
     @UseGuards(JwtAuthGuard, JobGuard)
-    async getApplicant(@Param('id') jobId: string) {
+    async getApplicants(@Param('id') jobId: string) {
         return await this.jobService.getApplicants(jobId)
     }
 

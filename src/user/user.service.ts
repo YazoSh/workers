@@ -22,13 +22,13 @@ export class UserService {
 
     async getUser(username: string) {
         const user = await this.dbsService.getUser(username)
-        console.log(user)
         return {
             success: user != null,
             data: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                company: user.company,
             },
         }
     }
