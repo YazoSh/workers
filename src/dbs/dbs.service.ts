@@ -67,6 +67,11 @@ export class DBService {
             include: {
                 company: true,
             },
+            orderBy: [
+                {
+                    datePosted: 'desc',
+                },
+            ],
         })
     }
 
